@@ -17,18 +17,24 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func learnHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/learn.html")
+	if r.Method == "POST" {
+		name := r.FormValue("learnerName")
 
-	if err != nil {
-		http.Error(w, "Internal Server Error: Could not load template", http.StatusInternalServerError)
-		return
-	}
+		fmt.Fprintf(w, "Hello %s, welcome to ThinkForge!", name)
 
-	err = tmpl.Execute(w, nil)
+	} else if r.Method == "GET" {
 
-	if err != nil {
-		http.Error(w, "Internal Server Error: Could not render template", http.StatusInternalServerError)
-		return
+		tmpl, err := template.ParseFiles("templates/learn.html")
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not load template", http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not render template", http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
@@ -39,5 +45,9 @@ func main() {
 
 	fmt.Println("ThinkForge is running on http://localhost:8080")
 
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+
+	if err != nil {
+		fmt.Println("Server error:", err)
+	}
 }
