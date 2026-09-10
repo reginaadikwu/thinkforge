@@ -6,6 +6,20 @@ import (
 	"net/http"
 )
 
+type Challenge struct {
+	Question        string
+	Choices         []string
+	Answer          int
+	WrongFeedback   map[int][]string
+	CorrectFeedback string
+	Walkthrough     string
+}
+
+type Session struct {
+	Attempts          int
+	AttemptsPerAnswer map[int]int
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 
