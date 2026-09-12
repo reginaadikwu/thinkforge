@@ -7,6 +7,8 @@
 </head>
 <body>
 
+    {{ if not .ShowIntro }}
+
     <h1>Welcome to ThinkForge</h1>
     <h2>I'm Forge, your mentor.</h2>
     <p>Before we begin, let's get to know you.</p>
@@ -21,8 +23,54 @@
             placeholder="Your name..."
         >
 
-        <button type="submit">Let's Go! </button>
+        <button type="submit">Let's Go!</button>
     </form>
+
+    {{ end }}
+
+    {{ if .ShowIntro }}
+
+<h1>Hello {{ .Name }}, welcome to ThinkForge! 👋</h1>
+
+<p>Before Lesson 1 begins, I'd like you to solve a little riddle.</p>
+
+<h2>{{ .Challenge.Question }}</h2>
+
+<form action="/learn" method="POST">
+
+    <label>
+        <input type="radio" name="answer" value="0">
+        Kerosene lamp
+    </label>
+
+    <br>
+
+    <label>
+        <input type="radio" name="answer" value="1">
+        Wood-burning stove
+    </label>
+
+    <br>
+
+    <label>
+        <input type="radio" name="answer" value="2">
+        Wax candle
+    </label>
+
+    <br>
+
+    <label>
+        <input type="radio" name="answer" value="3">
+        None above
+    </label>
+
+    <br><br>
+
+    <button type="submit">Submit Answer</button>
+
+</form>
+
+{{ end }}
 
 </body>
 </html>

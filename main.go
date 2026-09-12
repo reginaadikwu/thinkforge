@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
 type Challenge struct {
@@ -20,6 +21,49 @@ type Session struct {
 	AttemptsPerAnswer map[int]int
 }
 
+type LearnPage struct {
+	Name      string
+	ShowIntro bool
+	Challenge Challenge
+}
+
+var cabinChallenge = Challenge{
+	Question: "You're freezing in a pitch-black cabin during a winter storm. You have one single match. There is a kerosene lamp, a wood-burning stove, and a wax candle. What should you light first?",
+
+	Choices: []string{
+		"Kerosene lamp",
+		"Wood-burning stove",
+		"Wax candle",
+		"None above",
+	},
+
+	Answer: 3,
+
+	WrongFeedback: map[int][]string{
+		0: {
+			"You're focused on solving the darkness, which makes sense. But before the lamp can give you any light, think about what has to happen first.",
+			"To bring light to the room, what must you strike or ignite before anything else?",
+			"You need to light the match first. Once you have a flame, you can use it to light one of the available sources.",
+		},
+
+		1: {
+			"You're focused on solving the freezing cold, which makes sense. But before the stove can give you any heat, think about what has to happen first.",
+			"The stove can keep you warm, but look at the one tiny object in your hand. Can you light the logs directly, or does something else need to burn first?",
+			"You need to light the match first. Once you have a flame, you can use it to start the fire in the stove.",
+		},
+
+		2: {
+			"You're thinking about making the light last longer, which makes sense. But before the candle can burn, think about what has to happen first.",
+			"The candle is useful for making light last, but what physical action must happen before any of the objects can start burning?",
+			"You need to light the match first. Once you have a flame, you can use it to light the candle.",
+		},
+	},
+
+	CorrectFeedback: "Spot on! You nailed it. 🧠🔥 You didn't just guess the answer. You looked past the obvious choices and noticed what had to happen first. That's an important part of programming: understanding the problem before trying to solve it. Great thinking! You just took your first step toward thinking like a programmer. 🚀",
+
+	Walkthrough: "The correct answer is D: None above. Before you can light the lamp, stove, or candle, you first need to light the single match. The match creates the flame that lets you ignite one of the other objects. The key lesson is to look for the first step in a sequence instead of jumping straight to the final goal.",
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 
@@ -32,9 +76,48 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 func learnHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+
 		name := r.FormValue("learnerName")
 
-		fmt.Fprintf(w, "Hello %s, welcome to ThinkForge!", name)
+		if name != "" {
+			page := LearnPage{
+				Name:      name,
+				ShowIntro: true,
+				Challenge: cabinChallenge,
+			}
+
+			tmpl, err := template.ParseFiles("templates/learn.html")
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not load template", http.StatusInternalServerError)
+				return
+			}
+
+			err = tmpl.Execute(w, page)
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not render template", http.StatusInternalServerError)
+				return
+			}
+
+			return
+		}
+
+		answer := r.FormValue("answer")
+
+		if answer != "" {
+			answerInt, err := strconv.Atoi(answer)
+
+			if err != nil {
+				http.Error(w, "Invalid answer", http.StatusBadRequest)
+				return
+			}
+
+			if answerInt == cabinChallenge.Answer {
+				fmt.Fprintln(w, "Correct!")
+				return
+			}
+
+			return
+		}
 
 	} else if r.Method == "GET" {
 
@@ -44,7 +127,11 @@ func learnHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = tmpl.Execute(w, nil)
+		page := LearnPage{
+			Challenge: cabinChallenge,
+		}
+
+		err = tmpl.Execute(w, page)
 		if err != nil {
 			http.Error(w, "Internal Server Error: Could not render template", http.StatusInternalServerError)
 			return
