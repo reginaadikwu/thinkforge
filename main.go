@@ -22,9 +22,11 @@ type Session struct {
 }
 
 type LearnPage struct {
-	Name      string
-	ShowIntro bool
-	Challenge Challenge
+	Name          string
+	ShowIntro     bool
+	ShowChallenge bool
+	Challenge     Challenge
+	Feedback      string
 }
 
 var cabinChallenge = Challenge{
@@ -64,6 +66,10 @@ var cabinChallenge = Challenge{
 	Walkthrough: "The correct answer is D: None above. Before you can light the lamp, stove, or candle, you first need to light the single match. The match creates the flame that lets you ignite one of the other objects. The key lesson is to look for the first step in a sequence instead of jumping straight to the final goal.",
 }
 
+var session = Session{
+	AttemptsPerAnswer: make(map[int]int),
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 
@@ -79,11 +85,13 @@ func learnHandler(w http.ResponseWriter, r *http.Request) {
 
 		name := r.FormValue("learnerName")
 
-		if name != "" {
+		// First POST: learner is submitting their name.
+		if name != "" && r.FormValue("answer") == "" {
 			page := LearnPage{
-				Name:      name,
-				ShowIntro: true,
-				Challenge: cabinChallenge,
+				Name:          name,
+				ShowIntro:     true,
+				ShowChallenge: true,
+				Challenge:     cabinChallenge,
 			}
 
 			tmpl, err := template.ParseFiles("templates/learn.html")
@@ -112,10 +120,44 @@ func learnHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if answerInt == cabinChallenge.Answer {
-				fmt.Fprintln(w, "Correct!")
+				page := LearnPage{
+					Name:          name,
+					ShowIntro:     true,
+					ShowChallenge: false,
+					Challenge:     cabinChallenge,
+					Feedback:      cabinChallenge.CorrectFeedback,
+				}
+
+				tmpl, err := template.ParseFiles("templates/learn.html")
+				if err != nil {
+					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+					return
+				}
+
+				err = tmpl.Execute(w, page)
+				if err != nil {
+					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+					return
+				}
+
 				return
 			}
 
+			session.AttemptsPerAnswer[answerInt]++
+
+			attempt := session.AttemptsPerAnswer[answerInt]
+
+			feedback := cabinChallenge.WrongFeedback[answerInt]
+
+			if attempt >= 4 {
+				fmt.Fprintln(w, "You've reached the final hint.")
+				fmt.Fprintln(w, cabinChallenge.Walkthrough)
+				return
+			}
+
+			feedbackMessage := feedback[attempt-1]
+
+			fmt.Fprintln(w, feedbackMessage)
 			return
 		}
 
@@ -139,13 +181,27 @@ func learnHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func lesson1Handler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/lesson1.html")
+
+	if err != nil {
+		http.Error(w, "Internal Server Error: Could not load Lesson 1", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, "Internal Server Error: Could not render Lesson 1", http.StatusInternalServerError)
+		return
+	}
+}
+
 func main() {
 	http.HandleFunc("/", homeHandler)
-
 	http.HandleFunc("/learn", learnHandler)
+	http.HandleFunc("/lesson1", lesson1Handler)
 
 	fmt.Println("ThinkForge is running on http://localhost:8080")
-
 	err := http.ListenAndServe(":8080", nil)
 
 	if err != nil {

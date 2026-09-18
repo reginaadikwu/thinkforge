@@ -13,7 +13,7 @@
     <h2>I'm Forge, your mentor.</h2>
     <p>Before we begin, let's get to know you.</p>
 
-    <form action="/learn" method="POST">
+   <form action="/learn" method="POST">
         <label for="name">What is your name?</label>
 
         <input
@@ -28,15 +28,19 @@
 
     {{ end }}
 
-    {{ if .ShowIntro }}
+  {{ if .ShowIntro }}
 
-<h1>Hello {{ .Name }}, welcome to ThinkForge! 👋</h1>
+    <h1>Hello {{ .Name }}, welcome to ThinkForge! 👋</h1>
+
+    {{ if .ShowChallenge }}
 
 <p>Before Lesson 1 begins, I'd like you to solve a little riddle.</p>
 
 <h2>{{ .Challenge.Question }}</h2>
 
 <form action="/learn" method="POST">
+
+    <input type="hidden" name="learnerName" value="{{ .Name }}">
 
     <label>
         <input type="radio" name="answer" value="0">
@@ -72,5 +76,16 @@
 
 {{ end }}
 
+{{ if .Feedback }}
+    <h2>{{ .Feedback }}</h2>
+
+    <p>Ready for Lesson 1?</p>
+
+    <form action="/lesson1" method="GET">
+        <button type="submit">Start Lesson 1</button>
+    </form>
+{{ end }}
+
+{{ end }}
 </body>
 </html>
