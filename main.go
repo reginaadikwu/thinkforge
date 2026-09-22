@@ -182,6 +182,16 @@ func learnHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lesson1Handler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "POST" {
+
+		answer := r.FormValue("answer")
+
+		fmt.Fprintln(w, "Good thinking ! let's look at the steps carefully.")
+
+		return
+	}
+
 	tmpl, err := template.ParseFiles("templates/lesson1.html")
 
 	if err != nil {
