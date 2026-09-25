@@ -204,6 +204,14 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 			page.Feedback = "Boiling the water is a good step. Now think about what you would need to do before and after that."
 		}
 
+		if answer == "2" {
+			page.Feedback = "Putting the tea in the cup is part of the process. But before that can happen, what would you need to prepare first?"
+		}
+
+		if answer == "3" {
+			page.Feedback = "Drinking the tea is the final step. Before you can get there, what steps would you need to complete first?"
+		}
+
 		tmpl, err := template.ParseFiles("templates/lesson1.html")
 
 		if err != nil {
@@ -216,24 +224,6 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Internal Server Error: Could not render Lesson 1", http.StatusInternalServerError)
 			return
-		}
-
-		return
-
-		if answer == "0" {
-			fmt.Fprintln(w, "Getting a cup is a reasonable first step. But think about what needs to happen before you can actually make the tea.")
-		}
-
-		if answer == "1" {
-			fmt.Fprintln(w, "Boiling the water is a good step. Now think about what you would need to do before and after that.")
-		}
-
-		if answer == "2" {
-			fmt.Fprintln(w, "Putting the tea in the cup is part of the process. But before that can happen, what would you need to prepare first?")
-		}
-
-		if answer == "3" {
-			fmt.Fprintln(w, "Drinking the tea is the final step. Before you can get there, what steps would you need to complete first?")
 		}
 
 		return
