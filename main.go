@@ -196,6 +196,14 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 			Answer: answer,
 		}
 
+		if answer == "0" {
+			page.Feedback = "Getting a cup is a reasonable first step. But think about what needs to happen before you can actually make the tea."
+		}
+
+		if answer == "1" {
+			page.Feedback = "Boiling the water is a good step. Now think about what you would need to do before and after that."
+		}
+
 		tmpl, err := template.ParseFiles("templates/lesson1.html")
 
 		if err != nil {

@@ -34,6 +34,7 @@
 
     <form action="/lesson1" method="POST">
 
+        <label>
             <input type="radio" name="answer" value="0">
             Get a cup
         </label>
@@ -64,6 +65,10 @@
         <button type="submit">Submit Answer</button>
 
     </form>
+
+    {{ if .Feedback }}
+        <p>{{ .Feedback }}</p>
+    {{ end }}
 
 </body>
 </html>
