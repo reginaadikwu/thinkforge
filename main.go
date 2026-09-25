@@ -30,8 +30,9 @@ type LearnPage struct {
 }
 
 type LessonPage struct {
-	Answer   string
-	Feedback string
+	Answer      string
+	Feedback    string
+	Explanation string
 }
 
 var cabinChallenge = Challenge{
@@ -195,6 +196,8 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 		page := LessonPage{
 			Answer: answer,
 		}
+
+		page.Explanation = "And this is exactly why I asked you that question. When you're programming, you don't immediately start writing code. First, you need to understand what you're trying to accomplish. Then you break the problem into smaller steps. Making tea works the same way. You don't just say, \"Make tea.\" You think about the steps needed to get there. That's how programmers begin solving problems too."
 
 		if answer == "0" {
 			page.Feedback = "Getting a cup is a reasonable first step. But think about what needs to happen before you can actually make the tea."
