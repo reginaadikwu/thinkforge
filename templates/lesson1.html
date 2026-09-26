@@ -74,5 +74,51 @@
         <p>{{ .Explanation }}</p>
     {{ end }}
 
+    {{ if .ShowChallenge }}
+
+    <h2>Let's see if you can use that idea.</h2>
+
+    <p>
+        Imagine your phone is almost out of battery.
+        You want to charge it.
+        What would you think about first?
+    </p>
+
+    <form action="/lesson1" method="POST">
+
+        <label>
+            <input type="radio" name="challengeAnswer" value="0">
+            Start using the phone
+        </label>
+
+        <br>
+
+        <label>
+            <input type="radio" name="challengeAnswer" value="1">
+            Find a charger
+        </label>
+
+        <br>
+
+        <label>
+            <input type="radio" name="challengeAnswer" value="2">
+            Open a game
+        </label>
+
+        <br>
+
+        <label>
+            <input type="radio" name="challengeAnswer" value="3">
+            Put the phone away
+        </label>
+
+        <br><br>
+
+        <button type="submit">Submit Answer</button>
+
+    </form>
+
+{{ end }}
+
 </body>
 </html>

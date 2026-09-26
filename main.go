@@ -30,9 +30,10 @@ type LearnPage struct {
 }
 
 type LessonPage struct {
-	Answer      string
-	Feedback    string
-	Explanation string
+	Answer        string
+	Feedback      string
+	Explanation   string
+	ShowChallenge bool
 }
 
 var cabinChallenge = Challenge{
@@ -192,12 +193,25 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
 		answer := r.FormValue("answer")
+		challengeAnswer := r.FormValue("challengeAnswer")
+
+		if challengeAnswer != "" {
+			if challengeAnswer == "1" {
+				fmt.Fprintln(w, "Exactly! You thought about what you need first before trying to charge the phone. That's the kind of step-by-step thinking programmers use.")
+			} else {
+				fmt.Fprintln(w, "You're thinking about the goal, which is good. Now ask yourself: what do you need before you can actually charge the phone?")
+			}
+
+			return
+		}
 
 		page := LessonPage{
 			Answer: answer,
 		}
 
 		page.Explanation = "And this is exactly why I asked you that question. When you're programming, you don't immediately start writing code. First, you need to understand what you're trying to accomplish. Then you break the problem into smaller steps. Making tea works the same way. You don't just say, \"Make tea.\" You think about the steps needed to get there. That's how programmers begin solving problems too."
+
+		page.ShowChallenge = true
 
 		if answer == "0" {
 			page.Feedback = "Getting a cup is a reasonable first step. But think about what needs to happen before you can actually make the tea."
