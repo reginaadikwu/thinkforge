@@ -196,10 +196,28 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 		challengeAnswer := r.FormValue("challengeAnswer")
 
 		if challengeAnswer != "" {
+			page := LessonPage{
+				ShowChallenge: true,
+			}
+
 			if challengeAnswer == "1" {
-				fmt.Fprintln(w, "Exactly! You thought about what you need first before trying to charge the phone. That's the kind of step-by-step thinking programmers use.")
+				page.Feedback = "Exactly! You thought about what you need first before trying to charge the phone. That's the kind of step-by-step thinking programmers use."
 			} else {
-				fmt.Fprintln(w, "You're thinking about the goal, which is good. Now ask yourself: what do you need before you can actually charge the phone?")
+				page.Feedback = "You're thinking about the goal, which is good. Now ask yourself: what do you need before you can actually charge the phone?"
+			}
+
+			tmpl, err := template.ParseFiles("templates/lesson1.html")
+
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not load Lesson 1", http.StatusInternalServerError)
+				return
+			}
+
+			err = tmpl.Execute(w, page)
+
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not render Lesson 1", http.StatusInternalServerError)
+				return
 			}
 
 			return
