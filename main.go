@@ -30,10 +30,11 @@ type LearnPage struct {
 }
 
 type LessonPage struct {
-	Answer        string
-	Feedback      string
-	Explanation   string
-	ShowChallenge bool
+	Answer            string
+	Feedback          string
+	ChallengeFeedback string
+	Explanation       string
+	ShowChallenge     bool
 }
 
 var cabinChallenge = Challenge{
@@ -201,9 +202,9 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if challengeAnswer == "1" {
-				page.Feedback = "Exactly! You thought about what you need first before trying to charge the phone. That's the kind of step-by-step thinking programmers use."
+				page.ChallengeFeedback = "Exactly! You thought about what you need first before trying to charge the phone. That's the kind of step-by-step thinking programmers use."
 			} else {
-				page.Feedback = "You're thinking about the goal, which is good. Now ask yourself: what do you need before you can actually charge the phone?"
+				page.ChallengeFeedback = "You're thinking about the goal, which is good. Now ask yourself: what do you need before you can actually charge the phone?"
 			}
 
 			tmpl, err := template.ParseFiles("templates/lesson1.html")
