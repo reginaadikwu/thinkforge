@@ -9,120 +9,132 @@
 
     <h1>Lesson 1</h1>
 
-    <h2>Thinking Like a Programmer</h2>
-
-    <p>
-        Alright! Let's begin.
-    </p>
-
-    <p>
-        Before we write any code, I want you to learn something
-        that will stay with you throughout your programming journey.
-    </p>
-
-    <p>
-        Programming isn't just about writing code.
-        A big part of programming is learning how to think through a problem.
-    </p>
-
-    <h2>Let's try something simple.</h2>
-
-    <p>
-        Imagine I ask you to make a cup of tea.
-        What would you do first?
-    </p>
-
-    <form action="/lesson1" method="POST">
-
-        <label>
-            <input type="radio" name="answer" value="0">
-            Get a cup
-        </label>
-
-        <br>
-
-        <label>
-            <input type="radio" name="answer" value="1">
-            Boil the water
-        </label>
-
-        <br>
-
-        <label>
-            <input type="radio" name="answer" value="2">
-            Put tea in the cup
-        </label>
-
-        <br>
-
-        <label>
-            <input type="radio" name="answer" value="3">
-            Drink the tea
-        </label>
-
-        <br><br>
-
-        <button type="submit">Submit Answer</button>
-
-    </form>
-
     {{ if .Feedback }}
+
         <p>{{ .Feedback }}</p>
+
+        {{ if .Explanation }}
+            <p>{{ .Explanation }}</p>
+        {{ end }}
+
+        {{ if .ShowChallenge }}
+
+            <h2>Let's see if you can use that idea.</h2>
+
+            <p>
+                Imagine your phone is almost out of battery.
+                You want to charge it.
+                What would you think about first?
+            </p>
+
+            <form action="/lesson1" method="POST">
+
+                <label>
+                    <input type="radio" name="challengeAnswer" value="0">
+                    Start using the phone
+                </label>
+
+                <br>
+
+                <label>
+                    <input type="radio" name="challengeAnswer" value="1">
+                    Find a charger
+                </label>
+
+                <br>
+
+                <label>
+                    <input type="radio" name="challengeAnswer" value="2">
+                    Open a game
+                </label>
+
+                <br>
+
+                <label>
+                    <input type="radio" name="challengeAnswer" value="3">
+                    Put the phone away
+                </label>
+
+                <br><br>
+
+                <button type="submit">Submit Answer</button>
+
+            </form>
+
+        {{ end }}
+
+    {{ else if .ChallengeFeedback }}
+
+        <p>{{ .ChallengeFeedback }}</p>
+
+        {{ if .ShowNextLesson }}
+
+            <form action="/lesson2" method="GET">
+                <button type="submit">Continue to Lesson 2</button>
+            </form>
+
+        {{ end }}
+
+    {{ else }}
+
+        <h2>Thinking Like a Programmer</h2>
+
+        <p>
+            Alright! Let's begin.
+        </p>
+
+        <p>
+            Before we write any code, I want you to learn something
+            that will stay with you throughout your programming journey.
+        </p>
+
+        <p>
+            Programming isn't just about writing code.
+            A big part of programming is learning how to think through a problem.
+        </p>
+
+        <h2>Let's try something simple.</h2>
+
+        <p>
+            Imagine I ask you to make a cup of tea.
+            What would you do first?
+        </p>
+
+        <form action="/lesson1" method="POST">
+
+            <label>
+                <input type="radio" name="answer" value="0">
+                Get a cup
+            </label>
+
+            <br>
+
+            <label>
+                <input type="radio" name="answer" value="1">
+                Boil the water
+            </label>
+
+            <br>
+
+            <label>
+                <input type="radio" name="answer" value="2">
+                Put tea in the cup
+            </label>
+
+            <br>
+
+            <label>
+                <input type="radio" name="answer" value="3">
+                Drink the tea
+            </label>
+
+            <br><br>
+
+            <button type="submit">Submit Answer</button>
+
+        </form>
+
     {{ end }}
-
-    {{ if .Explanation }}
-        <p>{{ .Explanation }}</p>
-    {{ end }}
-
-    {{ if .ShowChallenge }}
-
-    <h2>Let's see if you can use that idea.</h2>
-
-    <p>
-        Imagine your phone is almost out of battery.
-        You want to charge it.
-        What would you think about first?
-    </p>
-
-    <form action="/lesson1" method="POST">
-
-        <label>
-            <input type="radio" name="challengeAnswer" value="0">
-            Start using the phone
-        </label>
-
-        <br>
-
-        <label>
-            <input type="radio" name="challengeAnswer" value="1">
-            Find a charger
-        </label>
-
-        <br>
-
-        <label>
-            <input type="radio" name="challengeAnswer" value="2">
-            Open a game
-        </label>
-
-        <br>
-
-        <label>
-            <input type="radio" name="challengeAnswer" value="3">
-            Put the phone away
-        </label>
-
-        <br><br>
-
-        <button type="submit">Submit Answer</button>
-
-    </form>
-
-{{ if .ChallengeFeedback }}
-    <p>{{ .ChallengeFeedback }}</p>
-{{ end }}
-
-{{ end }}
 
 </body>
 </html>
