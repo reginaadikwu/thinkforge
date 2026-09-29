@@ -293,6 +293,36 @@ func lesson2Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
 		answer := r.FormValue("answer")
+		finalAnswer := r.FormValue("finalAnswer")
+
+		if finalAnswer != "" {
+
+			page := LessonPage{
+				ShowNextLesson: true,
+			}
+
+			if finalAnswer == "1" {
+				page.ChallengeFeedback = "Exactly! 🧠 You broke the bigger problem into smaller steps. That's how programmers make complicated things easier to solve."
+			} else {
+				page.ChallengeFeedback = "You're thinking about the goal, which is good. Now try breaking the login system into smaller steps."
+			}
+
+			tmpl, err := template.ParseFiles("templates/lesson2.html")
+
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
+				return
+			}
+
+			err = tmpl.Execute(w, page)
+
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)
+				return
+			}
+
+			return
+		}
 
 		tmpl, err := template.ParseFiles("templates/lesson2.html")
 
@@ -301,9 +331,12 @@ func lesson2Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = tmpl.Execute(w, map[string]string{
-			"Feedback": feedbackForLesson2(answer),
-		})
+		page := LessonPage{
+			Feedback:           feedbackForLesson2(answer),
+			ShowFinalChallenge: answer == "1",
+		}
+
+		err = tmpl.Execute(w, page)
 
 		if err != nil {
 			http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)

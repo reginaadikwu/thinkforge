@@ -118,5 +118,36 @@
         <p>{{ .Feedback }}</p>
     {{ end }}
 
+    {{ if .ShowFinalChallenge }}
+
+    <h2>One last challenge 🧠</h2>
+
+    <p>
+        Imagine you're building a login page.
+        What would you think about first?
+    </p>
+
+    <form action="/lesson2" method="POST">
+
+        <label>
+            <input type="radio" name="finalAnswer" value="0">
+            Try to build the entire login system at once.
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="radio" name="finalAnswer" value="1">
+            Break the login system into smaller steps.
+        </label>
+
+        <br><br>
+
+        <button type="submit">Submit Answer</button>
+
+    </form>
+
+{{ end }}
+
 </body>
 </html>
