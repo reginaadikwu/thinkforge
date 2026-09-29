@@ -278,10 +278,28 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func lesson2Handler(w http.ResponseWriter, r *http.Request) {
+
+	tmpl, err := template.ParseFiles("templates/lesson2.html")
+
+	if err != nil {
+		http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, nil)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)
+		return
+	}
+}
+
 func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/learn", learnHandler)
 	http.HandleFunc("/lesson1", lesson1Handler)
+	http.HandleFunc("/lesson2", lesson2Handler)
 
 	fmt.Println("ThinkForge is running on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
