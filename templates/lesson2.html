@@ -12,8 +12,111 @@
     <h2>Breaking Problems Into Steps</h2>
 
     <p>
-        Welcome to Lesson 2.
+        Welcome back! 👋
     </p>
+
+    <p>
+        In Lesson 1, you learned something important:
+        before solving a problem, you first need to understand it.
+    </p>
+
+    <p>
+        But understanding the problem is only the beginning.
+    </p>
+
+    <p>
+        When a problem is big, trying to solve everything at once
+        can make things confusing.
+    </p>
+
+    <p>
+        So what do programmers do?
+    </p>
+
+    <p>
+        They break the problem into smaller, manageable steps.
+    </p>
+
+    <h2>Let's try something.</h2>
+
+    <p>
+        Imagine I ask you to clean your room.
+    </p>
+
+    <p>
+        You probably wouldn't think:
+        "I need to clean everything at once!"
+    </p>
+
+    <p>
+        Instead, you might think:
+    </p>
+
+    <p>
+        1. Pick up the clothes.<br>
+        2. Arrange the books.<br>
+        3. Put things where they belong.<br>
+        4. Sweep the floor.
+    </p>
+
+    <p>
+        Each step is small.
+        But together, they solve the bigger problem.
+    </p>
+
+    <h2>That's how programmers think too.</h2>
+
+    <p>
+        Instead of saying:
+        "I need to build an entire website."
+    </p>
+
+    <p>
+        A programmer might break it down into smaller problems:
+    </p>
+
+    <p>
+        1. Create the homepage.<br>
+        2. Add the navigation.<br>
+        3. Create the learning page.<br>
+        4. Add the lesson interaction.
+    </p>
+
+    <p>
+        Big problem → smaller problems → smaller steps.
+    </p>
+
+    <h2>Now it's your turn. 🧠</h2>
+
+    <p>
+        Imagine you want to make a sandwich.
+        Which approach would make more sense?
+    </p>
+
+    <form action="/lesson2" method="POST">
+
+        <label>
+            <input type="radio" name="answer" value="0">
+            Try to make the whole sandwich at once without thinking about the steps.
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="radio" name="answer" value="1">
+            Break the task into smaller steps, such as getting the bread,
+            adding the filling, and putting it together.
+        </label>
+
+        <br><br>
+
+        <button type="submit">Submit Answer</button>
+
+    </form>
+
+    {{ if .Feedback }}
+        <p>{{ .Feedback }}</p>
+    {{ end }}
 
 </body>
 </html>

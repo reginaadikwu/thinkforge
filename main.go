@@ -30,11 +30,12 @@ type LearnPage struct {
 }
 
 type LessonPage struct {
-	Feedback          string
-	Explanation       string
-	ShowChallenge     bool
-	ChallengeFeedback string
-	ShowNextLesson    bool
+	Feedback           string
+	Explanation        string
+	ShowChallenge      bool
+	ChallengeFeedback  string
+	ShowNextLesson     bool
+	ShowFinalChallenge bool
 }
 
 var cabinChallenge = Challenge{
@@ -278,7 +279,39 @@ func lesson1Handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func feedbackForLesson2(answer string) string {
+
+	if answer == "1" {
+		return "Exactly! 🧠 You broke the bigger task into smaller steps. That's how programmers make complicated problems easier to handle."
+	}
+
+	return "Think about it again. When a task feels big or confusing, breaking it into smaller steps can make it much easier to solve."
+}
+
 func lesson2Handler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "POST" {
+
+		answer := r.FormValue("answer")
+
+		tmpl, err := template.ParseFiles("templates/lesson2.html")
+
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, map[string]string{
+			"Feedback": feedbackForLesson2(answer),
+		})
+
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)
+			return
+		}
+
+		return
+	}
 
 	tmpl, err := template.ParseFiles("templates/lesson2.html")
 
