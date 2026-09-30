@@ -7,147 +7,172 @@
 </head>
 <body>
 
-    <h1>Lesson 2</h1>
+    {{ if .ChallengeFeedback }}
 
-    <h2>Breaking Problems Into Steps</h2>
+        <h1>Lesson 2</h1>
 
-    <p>
-        Welcome back! 👋
-    </p>
+        <p>{{ .ChallengeFeedback }}</p>
 
-    <p>
-        In Lesson 1, you learned something important:
-        before solving a problem, you first need to understand it.
-    </p>
+        {{ if .ShowNextLesson }}
+            <form action="/lesson3" method="GET">
+                <button type="submit">Continue to Lesson 3</button>
+            </form>
+        {{ end }}
 
-    <p>
-        But understanding the problem is only the beginning.
-    </p>
+    {{ else if .ShowFinalChallenge }}
 
-    <p>
-        When a problem is big, trying to solve everything at once
-        can make things confusing.
-    </p>
+        <h1>Lesson 2</h1>
 
-    <p>
-        So what do programmers do?
-    </p>
+        <h2>One last challenge 🧠</h2>
 
-    <p>
-        They break the problem into smaller, manageable steps.
-    </p>
+        <p>
+            Imagine you're building a login page.
+            What would you think about first?
+        </p>
 
-    <h2>Let's try something.</h2>
+        <form action="/lesson2" method="POST">
 
-    <p>
-        Imagine I ask you to clean your room.
-    </p>
+            <label>
+                <input type="radio" name="finalAnswer" value="0">
+                Try to build the entire login system at once.
+            </label>
 
-    <p>
-        You probably wouldn't think:
-        "I need to clean everything at once!"
-    </p>
+            <br><br>
 
-    <p>
-        Instead, you might think:
-    </p>
+            <label>
+                <input type="radio" name="finalAnswer" value="1">
+                Break the login system into smaller steps.
+            </label>
 
-    <p>
-        1. Pick up the clothes.<br>
-        2. Arrange the books.<br>
-        3. Put things where they belong.<br>
-        4. Sweep the floor.
-    </p>
+            <br><br>
 
-    <p>
-        Each step is small.
-        But together, they solve the bigger problem.
-    </p>
+            <button type="submit">Submit Answer</button>
 
-    <h2>That's how programmers think too.</h2>
+        </form>
 
-    <p>
-        Instead of saying:
-        "I need to build an entire website."
-    </p>
+    {{ else if .Feedback }}
 
-    <p>
-        A programmer might break it down into smaller problems:
-    </p>
+        <h1>Lesson 2</h1>
 
-    <p>
-        1. Create the homepage.<br>
-        2. Add the navigation.<br>
-        3. Create the learning page.<br>
-        4. Add the lesson interaction.
-    </p>
-
-    <p>
-        Big problem → smaller problems → smaller steps.
-    </p>
-
-    <h2>Now it's your turn. 🧠</h2>
-
-    <p>
-        Imagine you want to make a sandwich.
-        Which approach would make more sense?
-    </p>
-
-    <form action="/lesson2" method="POST">
-
-        <label>
-            <input type="radio" name="answer" value="0">
-            Try to make the whole sandwich at once without thinking about the steps.
-        </label>
-
-        <br><br>
-
-        <label>
-            <input type="radio" name="answer" value="1">
-            Break the task into smaller steps, such as getting the bread,
-            adding the filling, and putting it together.
-        </label>
-
-        <br><br>
-
-        <button type="submit">Submit Answer</button>
-
-    </form>
-
-    {{ if .Feedback }}
         <p>{{ .Feedback }}</p>
+
+        {{ if .ShowFinalChallengeButton }}
+            <form action="/lesson2" method="GET">
+                <input type="hidden" name="step" value="final">
+                <button type="submit">Continue to Final Challenge</button>
+            </form>
+        {{ end }}
+
+    {{ else }}
+
+        <h1>Lesson 2</h1>
+
+        <h2>Breaking Problems Into Steps</h2>
+
+        <p>
+            Welcome back! 👋
+        </p>
+
+        <p>
+            In Lesson 1, you learned something important:
+            before solving a problem, you first need to understand it.
+        </p>
+
+        <p>
+            But understanding the problem is only the beginning.
+        </p>
+
+        <p>
+            When a problem is big, trying to solve everything at once
+            can make things confusing.
+        </p>
+
+        <p>
+            So what do programmers do?
+        </p>
+
+        <p>
+            They break the problem into smaller, manageable steps.
+        </p>
+
+        <h2>Let's try something.</h2>
+
+        <p>
+            Imagine I ask you to clean your room.
+        </p>
+
+        <p>
+            You probably wouldn't think:
+            "I need to clean everything at once!"
+        </p>
+
+        <p>
+            Instead, you might think:
+        </p>
+
+        <p>
+            1. Pick up the clothes.<br>
+            2. Arrange the books.<br>
+            3. Put things where they belong.<br>
+            4. Sweep the floor.
+        </p>
+
+        <p>
+            Each step is small.
+            But together, they solve the bigger problem.
+        </p>
+
+        <h2>That's how programmers think too.</h2>
+
+        <p>
+            Instead of saying:
+            "I need to build an entire website."
+        </p>
+
+        <p>
+            A programmer might break it down into smaller problems:
+        </p>
+
+        <p>
+            1. Create the homepage.<br>
+            2. Add the navigation.<br>
+            3. Create the learning page.<br>
+            4. Add the lesson interaction.
+        </p>
+
+        <p>
+            Big problem → smaller problems → smaller steps.
+        </p>
+
+        <h2>Now it's your turn. 🧠</h2>
+
+        <p>
+            Imagine you want to make a sandwich.
+            Which approach would make more sense?
+        </p>
+
+        <form action="/lesson2" method="POST">
+
+            <label>
+                <input type="radio" name="answer" value="0">
+                Try to make the whole sandwich at once without thinking about the steps.
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="radio" name="answer" value="1">
+                Break the task into smaller steps, such as getting the bread,
+                adding the filling, and putting it together.
+            </label>
+
+            <br><br>
+
+            <button type="submit">Submit Answer</button>
+
+        </form>
+
     {{ end }}
-
-    {{ if .ShowFinalChallenge }}
-
-    <h2>One last challenge 🧠</h2>
-
-    <p>
-        Imagine you're building a login page.
-        What would you think about first?
-    </p>
-
-    <form action="/lesson2" method="POST">
-
-        <label>
-            <input type="radio" name="finalAnswer" value="0">
-            Try to build the entire login system at once.
-        </label>
-
-        <br><br>
-
-        <label>
-            <input type="radio" name="finalAnswer" value="1">
-            Break the login system into smaller steps.
-        </label>
-
-        <br><br>
-
-        <button type="submit">Submit Answer</button>
-
-    </form>
-
-{{ end }}
 
 </body>
 </html>

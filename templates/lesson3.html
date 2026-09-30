@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 3 - ThinkForge</title>
+</head>
+<body>
+
+    {{ if .ChallengeFeedback }}
+
+        <h1>Lesson 3</h1>
+
+        <p>{{ .ChallengeFeedback }}</p>
+
+        {{ if .ShowNextLesson }}
+            <p>🎉 You've completed Lesson 3!</p>
+        {{ end }}
+
+    {{ else }}
+
+        <h1>Lesson 3</h1>
+
+        <h2>Giving Clear Instructions</h2>
+
+        <p>
+            Welcome back! 👋
+        </p>
+
+        <p>
+            In the last lesson, you learned how to break a big problem
+            into smaller steps.
+        </p>
+
+        <p>
+            But those steps also need to be clear.
+        </p>
+
+        <p>
+            Imagine you tell someone:
+            "Make a sandwich."
+        </p>
+
+        <p>
+            That's a goal, but it doesn't tell them exactly what to do.
+        </p>
+
+        <p>
+            A clearer set of instructions would be:
+        </p>
+
+        <p>
+            1. Get two slices of bread.<br>
+            2. Put the filling on one slice.<br>
+            3. Put the second slice on top.
+        </p>
+
+        <p>
+            Programming works in a similar way.
+            Computers need clear instructions about what to do.
+        </p>
+
+        <h2>Now it's your turn. 🧠</h2>
+
+        <p>
+            Which instruction is clearer?
+        </p>
+
+        <form action="/lesson3" method="POST">
+
+            <label>
+                <input type="radio" name="answer" value="0">
+                Make the sandwich.
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="radio" name="answer" value="1">
+                Get the bread, add the filling, and put the sandwich together.
+            </label>
+
+            <br><br>
+
+            <button type="submit">Submit Answer</button>
+
+        </form>
+
+    {{ end }}
+
+</body>
+</html>

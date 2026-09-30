@@ -30,12 +30,13 @@ type LearnPage struct {
 }
 
 type LessonPage struct {
-	Feedback           string
-	Explanation        string
-	ShowChallenge      bool
-	ChallengeFeedback  string
-	ShowNextLesson     bool
-	ShowFinalChallenge bool
+	Feedback                 string
+	Explanation              string
+	ShowChallenge            bool
+	ChallengeFeedback        string
+	ShowNextLesson           bool
+	ShowFinalChallenge       bool
+	ShowFinalChallengeButton bool
 }
 
 var cabinChallenge = Challenge{
@@ -290,11 +291,56 @@ func feedbackForLesson2(answer string) string {
 
 func lesson2Handler(w http.ResponseWriter, r *http.Request) {
 
+	if r.Method == "GET" {
+
+		step := r.URL.Query().Get("step")
+
+		if step == "final" {
+
+			page := LessonPage{
+				ShowFinalChallenge: true,
+			}
+
+			tmpl, err := template.ParseFiles("templates/lesson2.html")
+
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
+				return
+			}
+
+			err = tmpl.Execute(w, page)
+
+			if err != nil {
+				http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)
+				return
+			}
+
+			return
+		}
+
+		tmpl, err := template.ParseFiles("templates/lesson2.html")
+
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, nil)
+
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)
+			return
+		}
+
+		return
+	}
+
 	if r.Method == "POST" {
 
 		answer := r.FormValue("answer")
 		finalAnswer := r.FormValue("finalAnswer")
 
+		// Final challenge answer
 		if finalAnswer != "" {
 
 			page := LessonPage{
@@ -324,16 +370,17 @@ func lesson2Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// Sandwich question answer
+		page := LessonPage{
+			Feedback:                 feedbackForLesson2(answer),
+			ShowFinalChallengeButton: true,
+		}
+
 		tmpl, err := template.ParseFiles("templates/lesson2.html")
 
 		if err != nil {
 			http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
 			return
-		}
-
-		page := LessonPage{
-			Feedback:           feedbackForLesson2(answer),
-			ShowFinalChallenge: answer == "1",
 		}
 
 		err = tmpl.Execute(w, page)
@@ -345,18 +392,52 @@ func lesson2Handler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+}
 
-	tmpl, err := template.ParseFiles("templates/lesson2.html")
+func lesson3Handler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "POST" {
+
+		answer := r.FormValue("answer")
+
+		page := LessonPage{
+			ShowNextLesson: true,
+		}
+
+		if answer == "1" {
+			page.ChallengeFeedback = "Exactly! 🧠 Clear instructions help you know exactly what needs to happen. That's important in programming too."
+		} else {
+			page.ChallengeFeedback = "Good thinking. Now ask yourself: which instruction would be clear enough for someone else to follow?"
+		}
+
+		tmpl, err := template.ParseFiles("templates/lesson3.html")
+
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not load Lesson 3", http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, page)
+
+		if err != nil {
+			http.Error(w, "Internal Server Error: Could not render Lesson 3", http.StatusInternalServerError)
+			return
+		}
+
+		return
+	}
+
+	tmpl, err := template.ParseFiles("templates/lesson3.html")
 
 	if err != nil {
-		http.Error(w, "Internal Server Error: Could not load Lesson 2", http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error: Could not load Lesson 3", http.StatusInternalServerError)
 		return
 	}
 
 	err = tmpl.Execute(w, nil)
 
 	if err != nil {
-		http.Error(w, "Internal Server Error: Could not render Lesson 2", http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error: Could not render Lesson 3", http.StatusInternalServerError)
 		return
 	}
 }
@@ -366,6 +447,7 @@ func main() {
 	http.HandleFunc("/learn", learnHandler)
 	http.HandleFunc("/lesson1", lesson1Handler)
 	http.HandleFunc("/lesson2", lesson2Handler)
+	http.HandleFunc("/lesson3", lesson3Handler)
 
 	fmt.Println("ThinkForge is running on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
